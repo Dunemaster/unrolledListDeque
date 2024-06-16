@@ -12,27 +12,9 @@ class UnrolledLinkListTest {
     }
 
     @Test
-    fun testPush() {
-        // test inside block size
-        val list = UnrolledLinkList<Int>(3)
-        list.push(1)
-        assertEquals(1, list.size)
-        list.push(2)
-        assertEquals(2, list.size)
-        list.push(3)
-        assertEquals(3, list.size)
-
-        // test exceed block size
-        list.push(4)
-        assertEquals(4, list.size)
-        list.push(5)
-        assertEquals(5, list.size)
-    }
-
-    @Test
     fun testAdd() {
         // test inside block size
-        val list = UnrolledLinkList<Int>(3)
+        val list = UnrolledLinkList<Int>(6)
         list.add(1)
         assertEquals(1, list.size)
         list.add(2)
@@ -92,7 +74,7 @@ class UnrolledLinkListTest {
     @Test
     fun testPeekLastMethods() {
         // test inside block size
-        val list = UnrolledLinkList<Int>(3)
+        val list = UnrolledLinkList<Int>(6)
         list.add(1)
         list.add(2)
         list.add(3)
@@ -108,6 +90,11 @@ class UnrolledLinkListTest {
         // testing again, making sure list did not change after calling peekLast
         assertEquals(4, list.last)
         assertEquals(4, list.peekLast())
+
+        list.add(55)
+        assertEquals(5, list.size)
+        assertEquals(55, list.last)
+        assertEquals(55, list.peekLast())
     }
 
     @Test
@@ -119,7 +106,7 @@ class UnrolledLinkListTest {
 
     @Test
     fun testRemoveLast() {
-        val list = UnrolledLinkList<Int>(3)
+        val list = UnrolledLinkList<Int>(6)
         assertThrows(NoSuchElementException::class.java) { list.removeLast() }
 
         testRemoveLastPollLastInt(list) { list.removeLast() }
@@ -155,6 +142,24 @@ class UnrolledLinkListTest {
         assertEquals(1, list.size)
         assertEquals(1, action(list))
         assertEquals(0, list.size)
+    }
+
+    @Test
+    fun testPush() {
+        // test inside block size
+        val list = UnrolledLinkList<Int>(3)
+        list.push(1)
+        assertEquals(1, list.size)
+        list.push(2)
+        assertEquals(2, list.size)
+        list.push(3)
+        assertEquals(3, list.size)
+
+        // test exceed block size
+        list.push(4)
+        assertEquals(4, list.size)
+        list.push(5)
+        assertEquals(5, list.size)
     }
 
     @Test

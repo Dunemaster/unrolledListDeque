@@ -1,51 +1,56 @@
 package com.dunemaster.unrolledlist
-const val DEFAULT_BLOCK_SIZE : Int = 128;
+
+
+const val DEFAULT_BLOCK_SIZE : Int = 128
 
 /**
+ * This is an implementation of an unrolled linked list, where data is stored in blocks,
+ * which gives better cache locality and fewer allocations than a regular linked list.
+ *
+ * The idea of having two indexes, one for the left and one for the right, is to allow
+ * for efficient insertion and removal at both ends of the list. It is borrowed from the Python
+ * implementation of deque.
+ *
  * Currently, capacity restrictions are not supported
  */
-class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE) : RandomAccess,
+class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE,
+                          val headTailInsertionsRatio : Double = 0.5,
+                          private val center : Int = blockSize / 2,
+                          ) : RandomAccess,
     java.util.AbstractList<E>(), java.util.Deque<E> {
 
-    private class Node<E>(blockSize : Int ) {
-        fun addLast(element: E) {
-            elements[numElements] = element
-            numElements++
-        }
+    private var indexInHeadBlock : Int = center + 1
+    private var indexInTailBlock : Int = center
 
-        fun tryGetLast(): E? {
-            if (numElements == 0) {
-                return null
-            }
-            return elements[numElements - 1] as E
-        }
-
-        fun tryRemoveLast() : E? {
-            if (numElements == 0) {
-                return null
-            } else {
-                val e = elements[numElements-1] as E
-                numElements--
-                return e
-            }
-        }
-
-        fun tryGetFirst(): E? {
-            if (numElements == 0) {
-                return null
-            } else {
-                return  elements[numElements-1] as E
-            }
-        }
+    private class Node<E>(blockSize: Int) {
+//        fun tryRemoveLast() : E? {
+//            if (rightIndex == 0) {
+//                return null
+//            } else {
+//                val e = elements[rightIndex-1] as E
+//                rightIndex--
+//                return e
+//            }
+//        }
+//
+//        fun tryGetFirst(): E? {
+//            if (rightIndex == 0) {
+//                return null
+//            } else {
+//                return  elements[rightIndex-1] as E
+//            }
+//        }
 
         val elements = arrayOfNulls<Any>(blockSize)
-        var numElements = 0
+
+        var prev: Node<E>? = null
+
         var next: Node<E>? = null
     }
 
-    private var head: Node<E> = Node(blockSize)
+    private var head: Node<E>? = null
 
-    private var tail: Node<E> = head
+    private var tail: Node<E>? = null
     override fun remove(): E = removeFirst()
 
     override fun poll(): E = pollFirst()
@@ -106,9 +111,7 @@ class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE) : RandomAcc
         TODO("Not yet implemented")
     }
 
-    override fun push(element: E) {
-        tryAddLast(element)
-    }
+    override fun push(element: E) = addFirst(element)
 
     override fun offerLast(element: E): Boolean {
         tryAddLast(element)
@@ -116,7 +119,7 @@ class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE) : RandomAcc
     }
 
     override fun offerFirst(element: E): Boolean {
-        TODO("Not yet implemented")
+        return tryAddFirst(element)
     }
 
     override fun addLast(element: E) {
@@ -124,7 +127,8 @@ class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE) : RandomAcc
     }
 
     override fun addFirst(element: E) {
-        TODO("Not yet implemented")
+       if (!tryAddFirst(element))
+           throw IllegalStateException()
     }
 
     override fun offer(element: E): Boolean {
@@ -150,44 +154,60 @@ class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE) : RandomAcc
     }
 
     private fun tryAddLast(element: E): Boolean {
-        if (tail.numElements >= blockSize) {
+        indexInTailBlock++
+        if (tail == null) {
+            head = Node(blockSize)
+            tail = head
+        } else if (indexInTailBlock >= blockSize) {
             val newNode = Node<E>(blockSize)
-            tail.next = newNode
+            tail!!.next = newNode
+            newNode.prev = tail
             tail = newNode
+            indexInTailBlock = center + 1
         }
-        tail.addLast(element)
+        tail!!.elements.set(indexInTailBlock, element)
         size++
+        modCount++;
         return true
     }
 
     private fun tryGetLast() : E? {
-        return tail.tryGetLast()
+        if (tail == null) {
+            return null
+        }
+        return tail!!.elements.get(indexInTailBlock) as E
     }
 
     private fun tryRemoveLast(): E? {
-        val e = tail.tryRemoveLast()
-        if (e != null) {
-            size--
-            if (tail.numElements == 0) {
-                // remove the last node
-                removeLastNodeIfNeeded()
+        if (tail == null) {
+            return null
+        }
+        val element = tail!!.elements[indexInTailBlock]
+        indexInTailBlock--
+        size--
+        if (indexInTailBlock == center) {
+            // remove the last node
+            if (head == tail) {
+                head = null
+                tail = null
+            } else {
+                val prev = tail!!.prev!!
+                prev.next = null;
+                tail = tail!!.prev
+                indexInTailBlock = blockSize - 1;
             }
         }
-        return e
+        return element as E
+
     }
 
-    private fun removeLastNodeIfNeeded() {
-        if (tail == head)
-            return
-        var node = head
-        while (node.next != tail) {
-            node = node.next!!
-        }
-        tail = node
+
+
+    private fun tryAddFirst(element: E): Boolean {
+        throw NotImplementedError()
     }
 
-    private fun tryGetFirst(): E?  = head.tryGetFirst()
-
+    private fun tryGetFirst(): E?  =TODO()
     private inline fun throwIfEmpty() {
         if (size == 0) {
             throw NoSuchElementException()
