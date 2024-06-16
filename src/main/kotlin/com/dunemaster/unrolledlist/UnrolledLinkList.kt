@@ -201,7 +201,12 @@ class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE,
         return true
     }
 
-    private fun tryGetFirst(): E?  =TODO()
+    private fun tryGetFirst(): E? {
+        if (head == null) {
+            return null
+        }
+        return head!!.elements.get(indexInHeadBlock) as E
+    }
     private inline fun throwIfEmpty() {
         if (size == 0) {
             throw NoSuchElementException()

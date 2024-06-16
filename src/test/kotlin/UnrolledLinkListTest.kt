@@ -173,11 +173,18 @@ class UnrolledLinkListTest {
         list.add(2)
         list.add(3)
 
-        assertEquals(3, list.first)
-        assertEquals(3, list.peekFirst())
+        assertEquals(1, list.first)
+        assertEquals(1, list.peekFirst())
         // testing again, making sure list did not change after calling peekLast
-        assertEquals(3, list.first)
-        assertEquals(3, list.peekFirst())
+        assertEquals(1, list.first)
+        assertEquals(1, list.peekFirst())
+
+        list.push(0)
+        list.push(-1)
+        list.push(-2)
+        assertEquals(-2, list.first)
+        assertEquals(-2, list.peekFirst())
+
     }
 
     @Test
