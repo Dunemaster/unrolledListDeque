@@ -147,7 +147,7 @@ class UnrolledLinkListTest {
     @Test
     fun testPush() {
         // test inside block size
-        val list = UnrolledLinkList<Int>(3)
+        val list = UnrolledLinkList<Int>(6)
         list.push(1)
         assertEquals(1, list.size)
         list.push(2)
@@ -160,6 +160,10 @@ class UnrolledLinkListTest {
         assertEquals(4, list.size)
         list.push(5)
         assertEquals(5, list.size)
+        list.push(6)
+        assertEquals(6, list.size)
+        list.push(66)
+        assertEquals(7, list.size)
     }
 
     @Test

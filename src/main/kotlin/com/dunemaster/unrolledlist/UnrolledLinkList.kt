@@ -23,24 +23,6 @@ class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE,
     private var indexInTailBlock : Int = center
 
     private class Node<E>(blockSize: Int) {
-//        fun tryRemoveLast() : E? {
-//            if (rightIndex == 0) {
-//                return null
-//            } else {
-//                val e = elements[rightIndex-1] as E
-//                rightIndex--
-//                return e
-//            }
-//        }
-//
-//        fun tryGetFirst(): E? {
-//            if (rightIndex == 0) {
-//                return null
-//            } else {
-//                return  elements[rightIndex-1] as E
-//            }
-//        }
-
         val elements = arrayOfNulls<Any>(blockSize)
 
         var prev: Node<E>? = null
@@ -201,10 +183,22 @@ class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE,
 
     }
 
-
-
     private fun tryAddFirst(element: E): Boolean {
-        throw NotImplementedError()
+        indexInHeadBlock--
+        if (head == null) {
+            head = Node(blockSize)
+            tail = head
+        } else if (indexInHeadBlock < 0) {
+            val newNode = Node<E>(blockSize)
+            head!!.prev = newNode
+            newNode.next = head
+            head = newNode
+            indexInHeadBlock = center - 1
+        }
+        head!!.elements.set(indexInHeadBlock, element)
+        size++
+        modCount++;
+        return true
     }
 
     private fun tryGetFirst(): E?  =TODO()
