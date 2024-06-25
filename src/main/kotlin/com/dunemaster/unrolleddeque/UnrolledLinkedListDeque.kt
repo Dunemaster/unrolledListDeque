@@ -173,30 +173,30 @@ class UnrolledLinkedListDeque<E>(
         indexInTailBlock++
         if (indexInTailBlock == blockSize) {
             val newNode = Node<E>(blockSize)
-            tail!!.next = newNode
+            tail.next = newNode
             newNode.prev = tail
             tail = newNode
             indexInTailBlock = 0
         }
-        tail!!.elements[indexInTailBlock] = element
+        tail.elements[indexInTailBlock] = element
         size++
         return true
     }
 
     private fun tryGetLast() : E? {
-        if (tail == null) {
+        if (size == 0) {
             return null
         }
-        return tail!!.elements.get(indexInTailBlock) as E
+        return tail.elements.get(indexInTailBlock) as E
     }
 
     private fun tryRemoveLast(): E? {
         if (size == 0) {
             return null
         }
-        val element = tail!!.elements[indexInTailBlock]
-        // releasing memory! //TODO: test
-        tail!!.elements[indexInTailBlock] = null
+        val element = tail.elements[indexInTailBlock]
+        // releasing memory!
+        tail.elements[indexInTailBlock] = null
         indexInTailBlock--
         size--
         if (indexInTailBlock < 0) {
@@ -209,7 +209,7 @@ class UnrolledLinkedListDeque<E>(
                 val prev = tail.prev
                 prev!!.next = null
                 tail = tail.prev!!
-                indexInTailBlock = blockSize - 1;
+                indexInTailBlock = blockSize - 1
             }
         }
         return element as E
@@ -218,26 +218,26 @@ class UnrolledLinkedListDeque<E>(
 
     private fun tryAddFirst(element: E): Boolean {
         indexInHeadBlock--
-        if (head == null) {
+        if (size == 0) {
             head = Node(blockSize)
             tail = head
         } else if (indexInHeadBlock < 0) {
             val newNode = Node<E>(blockSize)
-            head!!.prev = newNode
+            head.prev = newNode
             newNode.next = head
             head = newNode
             indexInHeadBlock = blockSize - 1
         }
-        head!!.elements.set(indexInHeadBlock, element)
+        head.elements[indexInHeadBlock] = element
         size++
         return true
     }
 
     private fun tryGetFirst(): E? {
-        if (head == null) {
+        if (size == 0) {
             return null
         }
-        return head!!.elements.get(indexInHeadBlock) as E
+        return head.elements[indexInHeadBlock] as E
     }
 
     private fun tryRemoveFirst(): E? {
@@ -246,7 +246,7 @@ class UnrolledLinkedListDeque<E>(
         }
         val element = head.elements[indexInHeadBlock]
         // releasing memory!
-        head!!.elements[indexInHeadBlock] = null
+        head.elements[indexInHeadBlock] = null
         indexInHeadBlock++
         size--
         if (indexInHeadBlock == blockSize) {
@@ -256,10 +256,10 @@ class UnrolledLinkedListDeque<E>(
                     setToClearState()
                 }
             } else {
-                val next = head!!.next
-                next!!.prev = null;
+                val next = head.next
+                next!!.prev = null
                 head = next
-                indexInHeadBlock = 0;
+                indexInHeadBlock = 0
             }
         }
         return element as E
@@ -274,7 +274,7 @@ class UnrolledLinkedListDeque<E>(
     private fun setToClearState() {
         head = Node(blockSize)
         tail = head
-        size = 0;
+        size = 0
 
         indexInHeadBlock = center + 1
         indexInTailBlock = center
