@@ -47,9 +47,11 @@ class UnrolledLinkedListDeque<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE, //TO
         setToClearState()
     }
 
-
-
     override fun iterator(): MutableIterator<E> {
+        TODO("Not yet implemented")
+    }
+
+    override fun descendingIterator(): MutableIterator<E> {
         TODO("Not yet implemented")
     }
 
@@ -67,17 +69,7 @@ class UnrolledLinkedListDeque<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE, //TO
         TODO("Not yet implemented")
     }
 
-    override fun retainAll(elements: Collection<E>): Boolean {
-        TODO("Not yet implemented")
-    }
 
-    override fun removeAll(elements: Collection<E>): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun remove(element: E): Boolean {
-        TODO("Not yet implemented")
-    }
 
     override fun poll(): E? = pollFirst()
 
@@ -94,7 +86,6 @@ class UnrolledLinkedListDeque<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE, //TO
         throwIfEmpty()
         return tryRemoveLast()!!
     }
-
 
     override fun pollFirst(): E? = tryRemoveFirst()
 
@@ -122,19 +113,8 @@ class UnrolledLinkedListDeque<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE, //TO
         return tryGetLast()
     }
 
-    override fun removeFirstOccurrence(element: Any?): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun removeLastOccurrence(element: Any?): Boolean {
-        TODO("Not yet implemented")
-    }
-
     override fun pop(): E = removeFirst()
 
-    override fun descendingIterator(): MutableIterator<E> {
-        TODO("Not yet implemented")
-    }
 
     override fun push(element: E) = addFirst(element)
 
@@ -160,10 +140,27 @@ class UnrolledLinkedListDeque<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE, //TO
         tryAddLast(element)
         return true
     }
-
-
-
     override fun add(element: E) = tryAddLast(element)
+
+    override fun retainAll(elements: Collection<E>): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun removeAll(elements: Collection<E>): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun remove(element: E): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun removeFirstOccurrence(element: Any?): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun removeLastOccurrence(element: Any?): Boolean {
+        TODO("Not yet implemented")
+    }
 
     private fun tryAddLast(element: E): Boolean {
         indexInTailBlock++
