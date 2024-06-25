@@ -13,9 +13,19 @@ const val DEFAULT_BLOCK_SIZE : Int = 128
  *
  * Currently, capacity restrictions are not supported
  */
-class UnrolledLinkedListDeque<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE, //TODO: check even!
-                                 private val center : Int = blockSize / 2 - 1,
+class UnrolledLinkedListDeque<E>(
+    private val blockSize : Int  = DEFAULT_BLOCK_SIZE,
+    private val center : Int = blockSize / 2 - 1,
                           ) :  java.util.Deque<E> {
+
+    init {
+        require(blockSize > 0) { "blockSize must be positive" }
+        require(blockSize % 2 == 0) { "blockSize must be even" }
+    }
+
+    constructor(blockSize: Int) : this(blockSize, blockSize / 2 - 1) {
+
+    }
 
     private var indexInHeadBlock : Int = center + 1
     private var indexInTailBlock : Int = center
@@ -242,7 +252,7 @@ class UnrolledLinkedListDeque<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE, //TO
         }
         val element = head!!.elements[indexInHeadBlock]
         // releasing memory!
-        tail!!.elements[indexInHeadBlock] = null
+        head!!.elements[indexInHeadBlock] = null
         indexInHeadBlock++
         size--
         if (indexInHeadBlock == blockSize) {
