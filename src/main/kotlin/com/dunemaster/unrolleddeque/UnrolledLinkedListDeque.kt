@@ -48,7 +48,8 @@ class UnrolledLinkedListDeque<E>(
     override fun addAll(elements: Collection<E>): Boolean {
         var anyAdded = false
         for (element in elements) {
-            anyAdded = anyAdded || tryAddLast(element)
+            val added = tryAddLast(element)
+            anyAdded = anyAdded || added
         }
         return anyAdded
     }

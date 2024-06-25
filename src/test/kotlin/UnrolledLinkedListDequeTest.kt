@@ -59,6 +59,22 @@ class UnrolledLinkedListDequeTest {
         assertEquals(5, list.size)
     }
 
+    @Test
+    fun testAddAll() {
+        val list = UnrolledLinkedListDeque<Int>(4)
+
+        assertFalse(list.addAll(arrayListOf()))
+        assertEquals(0, list.size)
+
+        // test inside block size
+        assertTrue(list.addAll(arrayListOf(1, 2)))
+        assertEquals(2, list.size)
+
+        // test exceed block size
+        assertTrue(list.addAll(arrayListOf(3,4,5,6,7)))
+        assertEquals(7, list.size)
+    }
+
     /**
      * The test duplicates the test for the add() method, so we can change it if
      * the behavior of add and offerLast diverges
@@ -135,7 +151,6 @@ class UnrolledLinkedListDequeTest {
         assertThrows(NoSuchElementException::class.java) { list.removeLast() }
 
         testRemoveLastPollLastInt(list) { list.removeLast() }
-
     }
 
     @Test
@@ -234,11 +249,17 @@ class UnrolledLinkedListDequeTest {
     }
 
     @Test
-    fun testRemoveFirst() {
+    fun testRemoveFirstPop() {
         val list = UnrolledLinkedListDeque<Int>(6)
         assertThrows(NoSuchElementException::class.java) { list.removeFirst() }
 
         testRemoveFirstPollFirstInt(list) { list.removeFirst() }
+
+        // remove first and pop are the same
+        val list2 = UnrolledLinkedListDeque<Int>(6)
+        assertThrows(NoSuchElementException::class.java) { list2.pop() }
+
+        testRemoveFirstPollFirstInt(list2) { list2.pop() }
 
     }
 
