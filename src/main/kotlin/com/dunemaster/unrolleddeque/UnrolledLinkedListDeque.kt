@@ -21,6 +21,7 @@ class UnrolledLinkedListDeque<E>(
     init {
         require(blockSize > 0) { "blockSize must be positive" }
         require(blockSize % 2 == 0) { "blockSize must be even" }
+        setToClearState()
     }
 
     constructor(blockSize: Int) : this(blockSize, blockSize / 2 - 1) {
@@ -38,9 +39,9 @@ class UnrolledLinkedListDeque<E>(
         var next: Node<E>? = null
     }
 
-    private var head: Node<E>? = null
+    private lateinit var head: Node<E>
 
-    private var tail: Node<E>? = null
+    private lateinit var tail: Node<E>
 
     override var size: Int = 0
         private set
@@ -170,10 +171,7 @@ class UnrolledLinkedListDeque<E>(
 
     private fun tryAddLast(element: E): Boolean {
         indexInTailBlock++
-        if (tail == null) {
-            head = Node(blockSize)
-            tail = head
-        } else if (indexInTailBlock == blockSize) {
+        if (indexInTailBlock == blockSize) {
             val newNode = Node<E>(blockSize)
             tail!!.next = newNode
             newNode.prev = tail
@@ -193,7 +191,7 @@ class UnrolledLinkedListDeque<E>(
     }
 
     private fun tryRemoveLast(): E? {
-        if (tail == null) {
+        if (size == 0) {
             return null
         }
         val element = tail!!.elements[indexInTailBlock]
@@ -208,9 +206,9 @@ class UnrolledLinkedListDeque<E>(
                     setToClearState()
                 }
             } else {
-                val prev = tail!!.prev!!
-                prev.next = null
-                tail = tail!!.prev
+                val prev = tail.prev
+                prev!!.next = null
+                tail = tail.prev!!
                 indexInTailBlock = blockSize - 1;
             }
         }
@@ -243,10 +241,10 @@ class UnrolledLinkedListDeque<E>(
     }
 
     private fun tryRemoveFirst(): E? {
-        if (head == null) {
+        if (size == 0) {
             return null
         }
-        val element = head!!.elements[indexInHeadBlock]
+        val element = head.elements[indexInHeadBlock]
         // releasing memory!
         head!!.elements[indexInHeadBlock] = null
         indexInHeadBlock++
@@ -274,8 +272,8 @@ class UnrolledLinkedListDeque<E>(
     }
 
     private fun setToClearState() {
-        head = null
-        tail = null
+        head = Node(blockSize)
+        tail = head
         size = 0;
 
         indexInHeadBlock = center + 1
