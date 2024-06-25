@@ -113,12 +113,7 @@ class UnrolledLinkedListDeque<E>(
         return tryGetLast() ?: throw NoSuchElementException()
     }
 
-    override fun peekFirst(): E? {
-        if (size == 0) {
-            return null
-        }
-        return tryGetFirst()
-    }
+    override fun peekFirst(): E?  =  tryGetFirst()
 
     override fun peekLast(): E? {
         return tryGetLast()
