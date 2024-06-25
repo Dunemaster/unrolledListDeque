@@ -1,6 +1,6 @@
 package com.dunemaster.unrolledList.jmh;
 
-import com.dunemaster.unrolledlist.UnrolledLinkList;
+import com.dunemaster.unrolleddeque.UnrolledLinkedListDeque;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 @State(Scope.Benchmark)
 @Fork(1)
-public class UnrolledLinkListBenchmark {
+public class UnrolledLinkListDequeBenchmark {
 
     public static final int OBJECTS_TO_ADD = 100_000;
     public static final int WARMUP_ITERATIONS = 4;
@@ -17,7 +17,7 @@ public class UnrolledLinkListBenchmark {
     @Benchmark
     @Warmup(iterations = WARMUP_ITERATIONS)
     public void benchmarkAdd() {
-        UnrolledLinkList unrolledList = new UnrolledLinkList<>(128);
+        UnrolledLinkedListDeque unrolledList = new UnrolledLinkedListDeque<>(128);
         for (int i = 0; i < OBJECTS_TO_ADD; i++) {
             unrolledList.add(objectToAdd);
         }

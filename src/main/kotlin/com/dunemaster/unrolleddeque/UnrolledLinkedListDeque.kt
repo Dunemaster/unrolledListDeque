@@ -1,11 +1,11 @@
-package com.dunemaster.unrolledlist
+package com.dunemaster.unrolleddeque
 
 
 const val DEFAULT_BLOCK_SIZE : Int = 128
 
 /**
- * This is an implementation of an unrolled linked list, where data is stored in blocks,
- * which gives better cache locality and fewer allocations than a regular linked list.
+ * This is an implementation of an unrolled linked list deque, where data is stored in blocks,
+ * which gives better cache locality and fewer allocations than a regular linked list deque.
  *
  * The idea of having two indexes, one for the left and one for the right, is to allow
  * for efficient insertion and removal at both ends of the list. It is borrowed from the Python
@@ -13,11 +13,9 @@ const val DEFAULT_BLOCK_SIZE : Int = 128
  *
  * Currently, capacity restrictions are not supported
  */
-class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE,
-                          val headTailInsertionsRatio : Double = 0.5,
-                          private val center : Int = blockSize / 2,
-                          ) : RandomAccess,
-    java.util.AbstractList<E>(), java.util.Deque<E> {
+class UnrolledLinkedListDeque<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE, //TODO: check even!
+                                 private val center : Int = blockSize / 2 - 1,
+                          ) :  java.util.Deque<E> {
 
     private var indexInHeadBlock : Int = center + 1
     private var indexInTailBlock : Int = center
@@ -33,16 +31,63 @@ class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE,
     private var head: Node<E>? = null
 
     private var tail: Node<E>? = null
+
+    override var size: Int = 0
+        private set
+
+    override fun addAll(elements: Collection<E>): Boolean {
+        var anyAdded = false
+        for (element in elements) {
+            anyAdded = anyAdded || tryAddLast(element)
+        }
+        return anyAdded
+    }
+
+    override fun clear() {
+        setToClearState()
+    }
+
+
+
+    override fun iterator(): MutableIterator<E> {
+        TODO("Not yet implemented")
+    }
+
     override fun remove(): E = removeFirst()
 
-    override fun poll(): E = pollFirst()
+    override fun isEmpty(): Boolean {
+        return size == 0
+    }
+
+    override fun containsAll(elements: Collection<E>): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun contains(element: E): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun retainAll(elements: Collection<E>): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun removeAll(elements: Collection<E>): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun remove(element: E): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun poll(): E? = pollFirst()
 
     override fun element(): E  = getFirst()
 
     override fun peek(): E? =  peekFirst()
+
     override fun removeFirst(): E {
         throwIfEmpty()
-        TODO("Not yet implemented")
+        return tryRemoveFirst()!!
     }
 
     override fun removeLast(): E {
@@ -51,9 +96,7 @@ class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE,
     }
 
 
-    override fun pollFirst(): E {
-        TODO("Not yet implemented")
-    }
+    override fun pollFirst(): E? = tryRemoveFirst()
 
     override fun pollLast(): E? {
         return tryRemoveLast()
@@ -118,22 +161,9 @@ class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE,
         return true
     }
 
-    override var size: Int = 0
-        private set
 
-    override fun get(index: Int): E {
-        checkIndex(index)
-        // TODO!!!
-        return if (index == size)  getLast() else throw IndexOutOfBoundsException("Not yet implemented")
-    }
 
     override fun add(element: E) = tryAddLast(element)
-
-    override fun add(index: Int, element: E) {
-        checkIndex(index)
-        // TODO!!!
-         if (index == size)  tryAddLast(element) else throw IndexOutOfBoundsException("Not yet implemented")
-    }
 
     private fun tryAddLast(element: E): Boolean {
         indexInTailBlock++
@@ -145,11 +175,10 @@ class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE,
             tail!!.next = newNode
             newNode.prev = tail
             tail = newNode
-            indexInTailBlock = center + 1
+            indexInTailBlock = 0
         }
         tail!!.elements.set(indexInTailBlock, element)
         size++
-        modCount++;
         return true
     }
 
@@ -165,16 +194,19 @@ class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE,
             return null
         }
         val element = tail!!.elements[indexInTailBlock]
+        // releasing memory! //TODO: test
+        tail!!.elements[indexInTailBlock] = null
         indexInTailBlock--
         size--
-        if (indexInTailBlock == center) {
+        if (indexInTailBlock < 0) {
             // remove the last node
             if (head == tail) {
-                head = null
-                tail = null
+                if (size == 0) {
+                    setToClearState()
+                }
             } else {
                 val prev = tail!!.prev!!
-                prev.next = null;
+                prev.next = null
                 tail = tail!!.prev
                 indexInTailBlock = blockSize - 1;
             }
@@ -193,11 +225,10 @@ class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE,
             head!!.prev = newNode
             newNode.next = head
             head = newNode
-            indexInHeadBlock = center - 1
+            indexInHeadBlock = blockSize - 1
         }
         head!!.elements.set(indexInHeadBlock, element)
         size++
-        modCount++;
         return true
     }
 
@@ -207,17 +238,45 @@ class UnrolledLinkList<E>(val blockSize : Int  = DEFAULT_BLOCK_SIZE,
         }
         return head!!.elements.get(indexInHeadBlock) as E
     }
+
+    private fun tryRemoveFirst(): E? {
+        if (head == null) {
+            return null
+        }
+        val element = head!!.elements[indexInHeadBlock]
+        // releasing memory!
+        tail!!.elements[indexInHeadBlock] = null
+        indexInHeadBlock++
+        size--
+        if (indexInHeadBlock == blockSize) {
+            // remove the first node
+            if (head == tail) {
+                if (size == 0) {
+                    setToClearState()
+                }
+            } else {
+                val next = head!!.next
+                next!!.prev = null;
+                head = next
+                indexInHeadBlock = 0;
+            }
+        }
+        return element as E
+    }
+
     private inline fun throwIfEmpty() {
         if (size == 0) {
             throw NoSuchElementException()
         }
     }
 
-    private inline fun checkIndex(index: Int) {
-        if (index < 0 || index >= size) {
-            throw IndexOutOfBoundsException()
-        }
-    }
+    private fun setToClearState() {
+        head = null
+        tail = null
+        size = 0;
 
+        indexInHeadBlock = center + 1
+        indexInTailBlock = center
+    }
 
 }
