@@ -1,8 +1,11 @@
 package com.dunemaster.unrolledList.jmh;
 
 import com.dunemaster.unrolleddeque.UnrolledLinkedListDeque;
-import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.infra.Blackhole;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -27,17 +30,7 @@ public class UnrolledLinkListDequeBenchmark {
         }
     }
 
-    @Benchmark
-    @Warmup(iterations = WARMUP_ITERATIONS)
-    public void benchmarkAdd1024() {
-        UnrolledLinkedListDeque<Object> unrolledList = new UnrolledLinkedListDeque<>(1024);
-        for (int i = 0; i < OBJECTS_TO_ADD; i++) {
-            unrolledList.add(objectToAdd);
-        }
-        if (unrolledList.size() != OBJECTS_TO_ADD) {
-            throw new IllegalStateException("List size is not correct");
-        }
-    }
+
 
     @Benchmark
     @Warmup(iterations = WARMUP_ITERATIONS)
@@ -71,6 +64,18 @@ public class UnrolledLinkListDequeBenchmark {
             list.add(objectToAdd);
         }
         if (list.size() != OBJECTS_TO_ADD) {
+            throw new IllegalStateException("List size is not correct");
+        }
+    }
+
+    @Benchmark
+    @Warmup(iterations = WARMUP_ITERATIONS)
+    public void benchmarkAdd1024() {
+        UnrolledLinkedListDeque<Object> unrolledList = new UnrolledLinkedListDeque<>(1024);
+        for (int i = 0; i < OBJECTS_TO_ADD; i++) {
+            unrolledList.add(objectToAdd);
+        }
+        if (unrolledList.size() != OBJECTS_TO_ADD) {
             throw new IllegalStateException("List size is not correct");
         }
     }
