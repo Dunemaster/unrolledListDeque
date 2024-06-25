@@ -180,7 +180,7 @@ class UnrolledLinkedListDeque<E>(
             tail = newNode
             indexInTailBlock = 0
         }
-        tail!!.elements.set(indexInTailBlock, element)
+        tail!!.elements[indexInTailBlock] = element
         size++
         return true
     }
