@@ -2,6 +2,7 @@ package com.dunemaster.unrolledList.jmh;
 
 import com.dunemaster.unrolleddeque.UnrolledLinkedListDeque;
 import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -11,23 +12,42 @@ import java.util.LinkedList;
 public class UnrolledLinkListDequeBenchmark {
 
     public static final int OBJECTS_TO_ADD = 100_000;
-    public static final int WARMUP_ITERATIONS = 4;
+    public static final int WARMUP_ITERATIONS = 6;
     private final Object objectToAdd = new Object();
 
     @Benchmark
     @Warmup(iterations = WARMUP_ITERATIONS)
     public void benchmarkAdd() {
-        UnrolledLinkedListDeque unrolledList = new UnrolledLinkedListDeque<>(128);
+        UnrolledLinkedListDeque<Object> unrolledList = new UnrolledLinkedListDeque<>(256);
         for (int i = 0; i < OBJECTS_TO_ADD; i++) {
             unrolledList.add(objectToAdd);
         }
+        if (unrolledList.size() != OBJECTS_TO_ADD) {
+            throw new IllegalStateException("List size is not correct");
+        }
     }
+
+    @Benchmark
+    @Warmup(iterations = WARMUP_ITERATIONS)
+    public void benchmarkAdd1024() {
+        UnrolledLinkedListDeque<Object> unrolledList = new UnrolledLinkedListDeque<>(1024);
+        for (int i = 0; i < OBJECTS_TO_ADD; i++) {
+            unrolledList.add(objectToAdd);
+        }
+        if (unrolledList.size() != OBJECTS_TO_ADD) {
+            throw new IllegalStateException("List size is not correct");
+        }
+    }
+
     @Benchmark
     @Warmup(iterations = WARMUP_ITERATIONS)
     public void benchmarkAddArrayList() {
         ArrayList<Object> list = new ArrayList<>();
         for (int i = 0; i < OBJECTS_TO_ADD; i++) {
             list.add(objectToAdd);
+        }
+        if (list.size() != OBJECTS_TO_ADD) {
+            throw new IllegalStateException("List size is not correct");
         }
     }
 
@@ -38,6 +58,9 @@ public class UnrolledLinkListDequeBenchmark {
         for (int i = 0; i < OBJECTS_TO_ADD; i++) {
             list.add(objectToAdd);
         }
+        if (list.size() != OBJECTS_TO_ADD) {
+            throw new IllegalStateException("List size is not correct");
+        }
     }
 
     @Benchmark
@@ -46,6 +69,9 @@ public class UnrolledLinkListDequeBenchmark {
         LinkedList<Object> list = new LinkedList<>();
         for (int i = 0; i < OBJECTS_TO_ADD; i++) {
             list.add(objectToAdd);
+        }
+        if (list.size() != OBJECTS_TO_ADD) {
+            throw new IllegalStateException("List size is not correct");
         }
     }
 

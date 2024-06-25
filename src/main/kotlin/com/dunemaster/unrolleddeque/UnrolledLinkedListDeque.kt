@@ -173,7 +173,7 @@ class UnrolledLinkedListDeque<E>(
         if (tail == null) {
             head = Node(blockSize)
             tail = head
-        } else if (indexInTailBlock >= blockSize) {
+        } else if (indexInTailBlock == blockSize) {
             val newNode = Node<E>(blockSize)
             tail!!.next = newNode
             newNode.prev = tail
