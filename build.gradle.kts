@@ -3,7 +3,7 @@ plugins {
     id("me.champeau.jmh") version "0.7.2"
 }
 
-group = "com.dunemaster.unrolledList"
+group = "com.dunemaster"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -18,6 +18,10 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+tasks.jar {
+    archiveFileName.set("${project.group}-${project.name}-${project.version}.jar")
+}
+
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(8)
 }
