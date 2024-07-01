@@ -295,6 +295,7 @@ class UnrolledLinkedListDequeTest {
         val list = UnrolledLinkedListDeque<Int>(6)
         assertThrows(NoSuchElementException::class.java) { list.removeFirst() }
 
+
         testRemoveFirstPollFirstInt(list) { list.removeFirst() }
 
         // remove first and pop are the same
@@ -302,6 +303,12 @@ class UnrolledLinkedListDequeTest {
         assertThrows(NoSuchElementException::class.java) { list2.pop() }
 
         testRemoveFirstPollFirstInt(list2) { list2.pop() }
+
+        // remove and remove are the same
+        val list3 = UnrolledLinkedListDeque<Int>(6)
+        assertThrows(NoSuchElementException::class.java) { list3.remove() }
+
+        testRemoveFirstPollFirstInt(list3) { list3.remove() }
 
     }
 
