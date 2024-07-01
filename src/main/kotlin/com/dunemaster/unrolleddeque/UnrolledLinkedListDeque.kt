@@ -134,7 +134,7 @@ class UnrolledLinkedListDeque<E>(
     }
 
     override fun contains(element: E): Boolean {
-        TODO("Not yet implemented")
+       return indexOf(element) != -1
     }
 
 

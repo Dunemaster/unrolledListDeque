@@ -496,7 +496,26 @@ class UnrolledLinkedListDequeTest {
             assertEquals(item, itemsCount - i + 1)
         }
         assertFalse(iterator3.hasNext())
+    }
 
+    @Test
+    fun test_contains() {
+        val itemsCount = 6
+        // test grow only from tail
+        val list = UnrolledLinkedListDeque<Int>(4)
+        for (i in 1..itemsCount) {
+            list.push(-i)
+            list.add(i)
+        }
+
+        // Act-assert
+        assertTrue(list.contains(-1))
+        assertTrue(list.contains(-6))
+        assertTrue(list.contains(-3))
+        assertTrue(list.contains(1))
+        assertTrue(list.contains(6))
+        assertTrue(list.contains(3))
+        assertFalse(list.contains(0))
     }
 
 }
