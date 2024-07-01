@@ -390,4 +390,113 @@ class UnrolledLinkedListDequeTest {
         }
     }
 
+    @Test
+    fun testIterator_emptyList() {
+        val list = UnrolledLinkedListDeque<Int>(4)
+        val iterator = list.iterator()
+        assertFalse(iterator.hasNext())
+        assertThrows(NoSuchElementException::class.java) { iterator.next() }
+    }
+
+    @Test
+    fun testIterator() {
+        val list = UnrolledLinkedListDeque<Int>(4)
+
+        val itemsCount = 6
+        for (i in 1..itemsCount) {
+            list.push(-i)
+            list.add(i)
+        }
+
+        // Act-assert
+        val iterator2 = list.iterator()
+        for (i in 1..itemsCount*2) {
+            assertTrue(iterator2.hasNext())
+            iterator2.next()
+        }
+
+        assertFalse(iterator2.hasNext())
+        assertThrows(NoSuchElementException::class.java) { iterator2.next() }
+    }
+
+
+    @Test
+    fun test_iterator_grown_from_head() {
+        // test grow only from head
+        val listFromHead = UnrolledLinkedListDeque<Int>(4)
+        val itemsCount = 6
+
+        for (i in 1..itemsCount) {
+            listFromHead.push(i)
+        }
+
+        val iterator3 = listFromHead.iterator()
+        for (i in 1..itemsCount) {
+            assertTrue(iterator3.hasNext())
+            val item = iterator3.next()
+            assertEquals(item, itemsCount - i + 1)
+        }
+        assertFalse(iterator3.hasNext())
+        assertThrows(NoSuchElementException::class.java) { iterator3.next() }
+
+
+        // Test partial head block
+        listFromHead.removeFirst()
+        listFromHead.removeFirst()
+        val iterator4 = listFromHead.iterator()
+        val itemsCountAfterRemoval = itemsCount - 2
+        for (i in 1..itemsCountAfterRemoval) {
+            assertTrue(iterator4.hasNext())
+            val item = iterator4.next()
+            assertEquals(item, itemsCountAfterRemoval - i + 1)
+        }
+        assertFalse(iterator4.hasNext())
+        assertThrows(NoSuchElementException::class.java) { iterator4.next() }
+    }
+
+    @Test
+    fun testDescendingIterator_emptyList() {
+        val list = UnrolledLinkedListDeque<Int>(4)
+        val iterator = list.descendingIterator()
+        assertFalse(iterator.hasNext())
+        assertThrows(NoSuchElementException::class.java) { iterator.next() }
+    }
+
+
+    @Test
+    fun testDescendingIterator() {
+        val list = UnrolledLinkedListDeque<Int>(4)
+        val itemsCount = 6
+        for (i in 1..itemsCount) {
+            list.push(-i)
+            list.add(i)
+        }
+
+        // Act-assert
+        val iterator2 = list.descendingIterator()
+        for (i in 1..itemsCount*2) {
+            assertTrue(iterator2.hasNext())
+            iterator2.next()
+        }
+        assertFalse(iterator2.hasNext())
+    }
+
+    @Test
+    fun testDescendingIterator_grown_from_tail() {
+        val itemsCount = 6
+        // test grow only from tail
+        val listFromTail = UnrolledLinkedListDeque<Int>(4)
+        for (i in 1..itemsCount) {
+            listFromTail.add(i)
+        }
+        val iterator3= listFromTail.descendingIterator()
+        for (i in 1..itemsCount) {
+            assertTrue(iterator3.hasNext())
+            val item = iterator3.next()
+            assertEquals(item, itemsCount - i + 1)
+        }
+        assertFalse(iterator3.hasNext())
+
+    }
+
 }

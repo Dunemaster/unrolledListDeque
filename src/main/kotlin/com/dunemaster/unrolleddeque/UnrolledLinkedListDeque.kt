@@ -60,11 +60,67 @@ class UnrolledLinkedListDeque<E>(
     }
 
     override fun iterator(): MutableIterator<E> {
-        TODO("Not yet implemented")
+       val it =  object : MutableIterator<E> {
+                private var currentBlock = head
+                private var indexInCurrentBlock = indexInHeadBlock
+                private var remaining = size
+
+                override fun hasNext(): Boolean {
+                    return remaining > 0
+                }
+
+                override fun next(): E {
+                    if (remaining == 0) {
+                        throw NoSuchElementException()
+                    }
+                    val element = currentBlock.elements[indexInCurrentBlock] as E
+                    indexInCurrentBlock++
+                    remaining--
+                    if (indexInCurrentBlock == blockSize && remaining > 0) {
+                        currentBlock = currentBlock.next!!
+                        indexInCurrentBlock = 0
+                    }
+
+                    return element
+                }
+
+           override fun remove() {
+                throw UnsupportedOperationException()
+           }
+       }
+        return  it
     }
 
     override fun descendingIterator(): MutableIterator<E> {
-        TODO("Not yet implemented")
+        val it = object : MutableIterator<E> {
+            private var currentBlock = tail
+            private var indexInCurrentBlock = indexInTailBlock
+            private var remaining = size
+
+            override fun hasNext(): Boolean {
+                return remaining > 0
+            }
+
+            override fun next(): E {
+                if (remaining == 0) {
+                    throw NoSuchElementException()
+                }
+                val element = currentBlock.elements[indexInCurrentBlock] as E
+                indexInCurrentBlock--
+                remaining--
+                if (indexInCurrentBlock < 0 && remaining > 0) {
+                    currentBlock = currentBlock.prev!!
+                    indexInCurrentBlock = blockSize - 1
+                }
+
+                return element
+            }
+
+            override fun remove() {
+                throw UnsupportedOperationException()
+            }
+        }
+        return it
     }
 
     override fun remove(): E = removeFirst()
