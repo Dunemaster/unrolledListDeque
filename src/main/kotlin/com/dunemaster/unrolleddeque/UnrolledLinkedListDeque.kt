@@ -216,23 +216,23 @@ class UnrolledLinkedListDeque<E>(
     override fun add(element: E) = tryAddLast(element)
 
     override fun retainAll(elements: Collection<E>): Boolean {
-        TODO("Not yet implemented")
+        throw UnsupportedOperationException()
     }
 
     override fun removeAll(elements: Collection<E>): Boolean {
-        TODO("Not yet implemented")
+        throw UnsupportedOperationException()
     }
 
     override fun remove(element: E): Boolean {
-        TODO("Not yet implemented")
+        throw UnsupportedOperationException()
     }
 
     override fun removeFirstOccurrence(element: Any?): Boolean {
-        TODO("Not yet implemented")
+        throw UnsupportedOperationException()
     }
 
     override fun removeLastOccurrence(element: Any?): Boolean {
-        TODO("Not yet implemented")
+        throw UnsupportedOperationException()
     }
 
     private fun tryAddLast(element: E): Boolean {
