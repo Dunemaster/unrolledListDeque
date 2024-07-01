@@ -130,14 +130,24 @@ class UnrolledLinkedListDeque<E>(
     }
 
     override fun containsAll(elements: Collection<E>): Boolean {
-        TODO("Not yet implemented")
+        if (elements.isEmpty()) {
+            return true
+        }
+        if (elements.size == 1) {
+            return contains(elements.first())
+        }
+        val testSet = HashSet(elements)
+        for (dequeElement in this) {
+          if (testSet.contains(dequeElement)) {
+              testSet.remove(dequeElement)
+          }
+        }
+        return testSet.isEmpty()
     }
 
     override fun contains(element: E): Boolean {
        return indexOf(element) != -1
     }
-
-
 
     override fun poll(): E? = pollFirst()
 

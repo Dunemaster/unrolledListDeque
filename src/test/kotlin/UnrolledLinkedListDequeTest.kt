@@ -518,4 +518,22 @@ class UnrolledLinkedListDequeTest {
         assertFalse(list.contains(0))
     }
 
+    @Test
+    fun test_containsAll() {
+        val itemsCount = 6
+        // test grow only from tail
+        val list = UnrolledLinkedListDeque<Int>(4)
+        for (i in 1..itemsCount) {
+            list.push(-i)
+            list.add(i)
+        }
+
+        // Act-assert
+        assertTrue(list.containsAll(arrayListOf( -1, -3, 6, 3)))
+        assertTrue(list.containsAll(arrayListOf( -1)))
+        // Follows Kotlin conventions
+        assertTrue(list.containsAll(arrayListOf()))
+        assertFalse(list.containsAll(arrayListOf( -1, -3, 6, 78)))
+    }
+
 }
