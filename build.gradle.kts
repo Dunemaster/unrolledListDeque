@@ -4,7 +4,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "io.github.dunemaster.unrolleddeque"
+group = "io.github.dunemaster"
 version = "0.9-SNAPSHOT"
 
 repositories {
@@ -31,6 +31,29 @@ publishing {
     publications {
         create("mavenJava", MavenPublication::class) {
             from(components["java"])
+
+
+            pom {
+                name.set("Unrolled Deque")
+                description.set("Unrolled linked deque implementation")
+                url.set("https://github.com/Dunemaster/unrolledListDeque")
+                inceptionYear.set("2024")
+                licenses {
+                    license {
+                        name.set("Apache-2.0")
+                        url.set("https://spdx.org/licenses/Apache-2.0.html")
+                    }
+                }
+                developers {
+                    developer {
+                        name.set("Vasilii Kudriavtsev")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/Dunemaster/unrolledListDeque")
+                }
+            }
+
         }
     }
     repositories {
