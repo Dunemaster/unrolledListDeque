@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.dunemaster.unrolleddeque"
-version = "1.0-SNAPSHOT"
+version = "0.9-SNAPSHOT"
 
 repositories {
     mavenCentral()
