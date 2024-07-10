@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.9.23"
     id("me.champeau.jmh") version "0.7.2"
+    id("maven-publish")
 }
 
 group = "com.dunemaster"
@@ -24,4 +25,25 @@ tasks.jar {
 
 kotlin {
     jvmToolchain(8)
+}
+
+publishing {
+    publications {
+        create("mavenJava", MavenPublication::class) {
+            from(components["java"])
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}
+
+tasks.register<Jar>("sourcesJar") {
+    archiveClassifier.set("sources")
+    from(sourceSets["main"].allSource)
+}
+
+tasks.register<Jar>("javadocJar") {
+    archiveClassifier.set("javadoc")
+    from(tasks["javadoc"])
 }
