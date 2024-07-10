@@ -9,6 +9,7 @@ public class Runner {
         Options opt = new OptionsBuilder()
                 .include(UnrolledLinkListDequeAddBenchmark.class.getSimpleName())
                 .include(UnrolledLinkListDequeAddTwoSideBenchmark.class.getSimpleName())
+                .include(UnrolledLinkListDequeAddAndRemoveTwoSideBenchmark.class.getSimpleName())
                 .forks(1)
                 .build();
 
