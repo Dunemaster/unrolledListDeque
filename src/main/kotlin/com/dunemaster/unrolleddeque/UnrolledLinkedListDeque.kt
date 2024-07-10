@@ -18,9 +18,14 @@ class UnrolledLinkedListDeque<E>(
     private val center : Int = blockSize / 2 - 1,
                           ) :  java.util.Deque<E> {
 
+    private var head: Node<E>
+
+    private lateinit var tail: Node<E>
+
     init {
         require(blockSize > 0) { "blockSize must be positive" }
         require(blockSize % 2 == 0) { "blockSize must be even" }
+        head = Node(blockSize)
         setToClearState()
     }
 
@@ -39,9 +44,7 @@ class UnrolledLinkedListDeque<E>(
         var next: Node<E>? = null
     }
 
-    private lateinit var head: Node<E>
 
-    private lateinit var tail: Node<E>
 
     override var size: Int = 0
         private set
@@ -56,6 +59,7 @@ class UnrolledLinkedListDeque<E>(
     }
 
     override fun clear() {
+        head = Node(blockSize)
         setToClearState()
     }
 
@@ -338,7 +342,7 @@ class UnrolledLinkedListDeque<E>(
     }
 
     private fun setToClearState() {
-        head = Node(blockSize)
+
         tail = head
         size = 0
 

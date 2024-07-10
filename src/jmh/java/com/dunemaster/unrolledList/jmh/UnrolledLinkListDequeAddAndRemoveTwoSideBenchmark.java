@@ -34,8 +34,29 @@ public class UnrolledLinkListDequeAddAndRemoveTwoSideBenchmark {
                 }
             }
         }
-
     }
+
+    @Benchmark
+    @Warmup(iterations = WARMUP_ITERATIONS)
+    public void benchmarkAddRemove1024() {
+        UnrolledLinkedListDeque<Object> unrolledList = new UnrolledLinkedListDeque<>(1024);
+        for (int i = 0; i < INBENCHMARK_ITERATIONS; i++) {
+
+            for (int j = 0; j < ADD_BATCH_SIZE; j++) {
+                unrolledList.addFirst(objectToAdd);
+                unrolledList.addLast(objectToAdd);
+            }
+
+            for (int j = 0; j < ADD_BATCH_SIZE; j++) {
+                Object obj1 = unrolledList.removeFirst();
+                Object obj2 =unrolledList.removeLast();
+                if (obj1 != obj2) {
+                    throw new IllegalStateException();
+                }
+            }
+        }
+    }
+
 
 
 
