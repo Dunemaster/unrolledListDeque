@@ -7,7 +7,8 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 public class Runner {
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(UnrolledLinkListDequeBenchmark.class.getSimpleName())
+                .include(UnrolledLinkListDequeAddBenchmark.class.getSimpleName())
+                .include(UnrolledLinkListDequeAddTwoSideBenchmark.class.getSimpleName())
                 .forks(1)
                 .build();
 

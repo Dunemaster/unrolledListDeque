@@ -1,18 +1,15 @@
 package com.dunemaster.unrolledList.jmh;
 
 import com.dunemaster.unrolleddeque.UnrolledLinkedListDeque;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.Fork;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Warmup;
+import org.openjdk.jmh.annotations.*;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 @State(Scope.Benchmark)
 @Fork(1)
-public class UnrolledLinkListDequeBenchmark {
+public class UnrolledLinkListDequeAddTwoSideBenchmark {
 
     public static final int OBJECTS_TO_ADD = 100_000;
     public static final int WARMUP_ITERATIONS = 6;
@@ -24,6 +21,7 @@ public class UnrolledLinkListDequeBenchmark {
         UnrolledLinkedListDeque<Object> unrolledList = new UnrolledLinkedListDeque<>(256);
         for (int i = 0; i < OBJECTS_TO_ADD; i++) {
             unrolledList.add(objectToAdd);
+            unrolledList.push(objectToAdd);
         }
         if (unrolledList.size() != OBJECTS_TO_ADD) {
             throw new IllegalStateException("List size is not correct");
@@ -34,24 +32,26 @@ public class UnrolledLinkListDequeBenchmark {
 
     @Benchmark
     @Warmup(iterations = WARMUP_ITERATIONS)
-    public void benchmarkAddArrayList() {
-        ArrayList<Object> list = new ArrayList<>();
+    public void benchmarkAddArrayDeque() {
+        ArrayDeque<Object> deque = new ArrayDeque<>();
         for (int i = 0; i < OBJECTS_TO_ADD; i++) {
-            list.add(objectToAdd);
+            deque.add(objectToAdd);
+            deque.push(objectToAdd);
         }
-        if (list.size() != OBJECTS_TO_ADD) {
+        if (deque.size() != OBJECTS_TO_ADD * 2) {
             throw new IllegalStateException("List size is not correct");
         }
     }
 
     @Benchmark
     @Warmup(iterations = WARMUP_ITERATIONS)
-    public void benchmarkAddArrayListPreallocated() {
-        ArrayList<Object> list = new ArrayList<>(OBJECTS_TO_ADD);
+    public void benchmarkAddArrayDequePreallocated() {
+        ArrayDeque<Object> deque = new ArrayDeque<>(OBJECTS_TO_ADD * 2);
         for (int i = 0; i < OBJECTS_TO_ADD; i++) {
-            list.add(objectToAdd);
+            deque.add(objectToAdd);
+            deque.push(objectToAdd);
         }
-        if (list.size() != OBJECTS_TO_ADD) {
+        if (deque.size() != OBJECTS_TO_ADD * 2) {
             throw new IllegalStateException("List size is not correct");
         }
     }
@@ -62,8 +62,9 @@ public class UnrolledLinkListDequeBenchmark {
         LinkedList<Object> list = new LinkedList<>();
         for (int i = 0; i < OBJECTS_TO_ADD; i++) {
             list.add(objectToAdd);
+            list.push(objectToAdd);
         }
-        if (list.size() != OBJECTS_TO_ADD) {
+        if (list.size() != OBJECTS_TO_ADD*2) {
             throw new IllegalStateException("List size is not correct");
         }
     }
@@ -74,6 +75,7 @@ public class UnrolledLinkListDequeBenchmark {
         UnrolledLinkedListDeque<Object> unrolledList = new UnrolledLinkedListDeque<>(1024);
         for (int i = 0; i < OBJECTS_TO_ADD; i++) {
             unrolledList.add(objectToAdd);
+            unrolledList.push(objectToAdd);
         }
         if (unrolledList.size() != OBJECTS_TO_ADD) {
             throw new IllegalStateException("List size is not correct");
