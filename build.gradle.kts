@@ -4,7 +4,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "com.dunemaster"
+group = "com.dunemaster.unrolleddeque"
 version = "1.0-SNAPSHOT"
 
 repositories {
