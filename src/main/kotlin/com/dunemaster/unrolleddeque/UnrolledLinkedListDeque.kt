@@ -288,15 +288,14 @@ class UnrolledLinkedListDeque<E>(
 
     private fun tryAddFirst(element: E): Boolean {
         indexInHeadBlock--
-        if (size == 0) {
-            head = Node(blockSize)
-            tail = head
-        } else if (indexInHeadBlock < 0) {
-            val newNode = Node<E>(blockSize)
-            head.prev = newNode
-            newNode.next = head
-            head = newNode
-            indexInHeadBlock = blockSize - 1
+        if (size != 0) {
+            if (indexInHeadBlock < 0) {
+                val newNode = Node<E>(blockSize)
+                head.prev = newNode
+                newNode.next = head
+                head = newNode
+                indexInHeadBlock = blockSize - 1
+            }
         }
         head.elements[indexInHeadBlock] = element
         size++
