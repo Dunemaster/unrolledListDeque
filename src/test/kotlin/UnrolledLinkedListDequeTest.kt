@@ -1,4 +1,4 @@
-import com.dunemaster.unrolleddeque.UnrolledLinkedListDeque
+import com.dunemaster.unrolleddeque.UnrolledLinkedListDeque2
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -6,7 +6,7 @@ class UnrolledLinkedListDequeTest {
 
     @Test
     fun testEmptyList() {
-        val list = UnrolledLinkedListDeque<Int>()
+        val list = UnrolledLinkedListDeque2<Int>()
         assertEquals(0, list.size)
         assertTrue(list.isEmpty())
         assertNull(list.pollFirst())
@@ -15,7 +15,7 @@ class UnrolledLinkedListDequeTest {
 
     @Test
     fun testClearList() {
-        val list = UnrolledLinkedListDeque<Int>(4)
+        val list = UnrolledLinkedListDeque2<Int>(4)
         list.add(1)
         list.add(2)
         list.add(4)
@@ -44,14 +44,14 @@ class UnrolledLinkedListDequeTest {
     @Test
     fun testAdd() {
         // test inside block size
-        val list = UnrolledLinkedListDeque<Int>(6)
+        val list = UnrolledLinkedListDeque2<Int>(6)
         testAddAddLast(list) { l, x -> l.add(x) }
-        val list2 = UnrolledLinkedListDeque<Int>(6)
+        val list2 = UnrolledLinkedListDeque2<Int>(6)
         testAddAddLast(list2) { l, x -> l.addLast(x);  true }
     }
 
-    private fun testAddAddLast(list: UnrolledLinkedListDeque<Int>,
-                               action : Function2<UnrolledLinkedListDeque<Int>, Int, Boolean>) {
+    private fun testAddAddLast(list: UnrolledLinkedListDeque2<Int>,
+                               action : Function2<UnrolledLinkedListDeque2<Int>, Int, Boolean>) {
         action(list, 1)
         assertEquals(1, list.size)
         action(list,2)
@@ -69,7 +69,7 @@ class UnrolledLinkedListDequeTest {
 
     @Test
     fun testAddAll() {
-        val list = UnrolledLinkedListDeque<Int>(4)
+        val list = UnrolledLinkedListDeque2<Int>(4)
 
         assertFalse(list.addAll(arrayListOf()))
         assertEquals(0, list.size)
@@ -90,7 +90,7 @@ class UnrolledLinkedListDequeTest {
     @Test
     fun testOfferLast() {
         // test inside block size
-        val list = UnrolledLinkedListDeque<Int>(4)
+        val list = UnrolledLinkedListDeque2<Int>(4)
         list.offerLast(1)
         assertEquals(1, list.size)
         list.offerLast(2)
@@ -110,7 +110,7 @@ class UnrolledLinkedListDequeTest {
     @Test
     fun testPeekLastMethods() {
         // test inside block size
-        val list = UnrolledLinkedListDeque<Int>(6)
+        val list = UnrolledLinkedListDeque2<Int>(6)
         list.add(1)
         list.add(2)
         list.add(3)
@@ -148,14 +148,14 @@ class UnrolledLinkedListDequeTest {
 
     @Test
     fun testPeekLastEmptyList() {
-        val list = UnrolledLinkedListDeque<Int>(4)
+        val list = UnrolledLinkedListDeque2<Int>(4)
         assertThrows(NoSuchElementException::class.java) { list.last }
         assertNull(list.peekLast())
     }
 
     @Test
     fun testRemoveLast() {
-        val list = UnrolledLinkedListDeque<Int>(6)
+        val list = UnrolledLinkedListDeque2<Int>(6)
         assertThrows(NoSuchElementException::class.java) { list.removeLast() }
 
         testRemoveLastPollLastInt(list) { list.removeLast() }
@@ -163,14 +163,14 @@ class UnrolledLinkedListDequeTest {
 
     @Test
     fun testPollLast() {
-        val list = UnrolledLinkedListDeque<Int>(4)
+        val list = UnrolledLinkedListDeque2<Int>(4)
         assertNull(list.pollLast())
 
         testRemoveLastPollLastInt(list) { list.pollLast() }
     }
 
-    private fun testRemoveLastPollLastInt(list: UnrolledLinkedListDeque<Int>,
-                                          action : Function1<UnrolledLinkedListDeque<Int>, Int?> ) {
+    private fun testRemoveLastPollLastInt(list: UnrolledLinkedListDeque2<Int>,
+                                          action : Function1<UnrolledLinkedListDeque2<Int>, Int?> ) {
         // test inside block size
         list.push(1)
         list.add(2)
@@ -192,15 +192,15 @@ class UnrolledLinkedListDequeTest {
         assertEquals(1, list.size)
         assertEquals(1, action(list))
         assertEquals(0, list.size)
-        assertEquals(null, list.peekLast())
-        assertEquals(null, list.peekFirst())
+        assertNull(list.peekLast())
+        assertNull(list.peekFirst())
         assertTrue(list.isEmpty())
     }
 
     @Test
     fun testPush() {
         // test inside block size
-        val list = UnrolledLinkedListDeque<Int>(6)
+        val list = UnrolledLinkedListDeque2<Int>(6)
         list.push(1)
         assertEquals(1, list.size)
         list.push(2)
@@ -226,7 +226,7 @@ class UnrolledLinkedListDequeTest {
     @Test
     fun testOfferFirst() {
         // test inside block size
-        val list = UnrolledLinkedListDeque<Int>(6)
+        val list = UnrolledLinkedListDeque2<Int>(6)
         list.offerFirst(1)
         assertEquals(1, list.size)
         list.offerFirst(2)
@@ -248,7 +248,7 @@ class UnrolledLinkedListDequeTest {
 
     @Test
     fun testPeekFirstMethods() {
-        val list = UnrolledLinkedListDeque<Int>(4)
+        val list = UnrolledLinkedListDeque2<Int>(4)
         list.add(1)
         list.add(2)
         list.add(3)
@@ -283,7 +283,7 @@ class UnrolledLinkedListDequeTest {
 
     @Test
     fun testPeekFirstGetFistEmptyList() {
-        val list = UnrolledLinkedListDeque<Int>(4)
+        val list = UnrolledLinkedListDeque2<Int>(4)
         assertThrows(NoSuchElementException::class.java) { list.getFirst() }
         assertThrows(NoSuchElementException::class.java) { list.element() }
         assertNull(list.peekFirst())
@@ -292,20 +292,20 @@ class UnrolledLinkedListDequeTest {
 
     @Test
     fun testRemoveFirstPop() {
-        val list = UnrolledLinkedListDeque<Int>(6)
+        val list = UnrolledLinkedListDeque2<Int>(6)
         assertThrows(NoSuchElementException::class.java) { list.removeFirst() }
 
 
         testRemoveFirstPollFirstInt(list) { list.removeFirst() }
 
         // remove first and pop are the same
-        val list2 = UnrolledLinkedListDeque<Int>(6)
+        val list2 = UnrolledLinkedListDeque2<Int>(6)
         assertThrows(NoSuchElementException::class.java) { list2.pop() }
 
         testRemoveFirstPollFirstInt(list2) { list2.pop() }
 
         // remove and remove are the same
-        val list3 = UnrolledLinkedListDeque<Int>(6)
+        val list3 = UnrolledLinkedListDeque2<Int>(6)
         assertThrows(NoSuchElementException::class.java) { list3.remove() }
 
         testRemoveFirstPollFirstInt(list3) { list3.remove() }
@@ -314,20 +314,20 @@ class UnrolledLinkedListDequeTest {
 
     @Test
     fun testPollPollFirst() {
-        val list = UnrolledLinkedListDeque<Int>(4)
+        val list = UnrolledLinkedListDeque2<Int>(4)
         assertNull(list.pollFirst())
 
         testRemoveFirstPollFirstInt(list) { list.pollFirst() }
 
         // Poll and pollFirst are the same
-        val list2 = UnrolledLinkedListDeque<Int>(4)
+        val list2 = UnrolledLinkedListDeque2<Int>(4)
         assertNull(list2.poll())
 
         testRemoveFirstPollFirstInt(list2) { list2.poll() }
     }
 
-    private fun testRemoveFirstPollFirstInt(list: UnrolledLinkedListDeque<Int>,
-                                          action : Function1<UnrolledLinkedListDeque<Int>, Int?> ) {
+    private fun testRemoveFirstPollFirstInt(list: UnrolledLinkedListDeque2<Int>,
+                                          action : Function1<UnrolledLinkedListDeque2<Int>, Int?> ) {
         // test inside block size
         list.push(1)
         list.add(2)
@@ -350,8 +350,8 @@ class UnrolledLinkedListDequeTest {
         assertEquals(1, list.size)
         assertEquals(5, action(list))
         assertEquals(0, list.size)
-        assertEquals(null, list.peekLast())
-        assertEquals(null, list.peekFirst())
+        assertNull( list.peekLast())
+        assertNull( list.peekFirst())
         assertTrue(list.isEmpty())
 
         for (i in 1..30) {
@@ -374,7 +374,7 @@ class UnrolledLinkedListDequeTest {
     @Test
     fun testAlternatingPollFirstAndLast() {
         for (blockSize in intArrayOf(4, 30, 250, 1000)) {
-            val list = UnrolledLinkedListDeque<Int>(blockSize)
+            val list = UnrolledLinkedListDeque2<Int>(blockSize)
 
             for (itemsCount in intArrayOf(31, 244, 751)) {
 
@@ -399,7 +399,7 @@ class UnrolledLinkedListDequeTest {
 
     @Test
     fun testIterator_emptyList() {
-        val list = UnrolledLinkedListDeque<Int>(4)
+        val list = UnrolledLinkedListDeque2<Int>(4)
         val iterator = list.iterator()
         assertFalse(iterator.hasNext())
         assertThrows(NoSuchElementException::class.java) { iterator.next() }
@@ -407,7 +407,7 @@ class UnrolledLinkedListDequeTest {
 
     @Test
     fun testIterator() {
-        val list = UnrolledLinkedListDeque<Int>(4)
+        val list = UnrolledLinkedListDeque2<Int>(4)
 
         val itemsCount = 6
         for (i in 1..itemsCount) {
@@ -430,7 +430,7 @@ class UnrolledLinkedListDequeTest {
     @Test
     fun test_iterator_grown_from_head() {
         // test grow only from head
-        val listFromHead = UnrolledLinkedListDeque<Int>(4)
+        val listFromHead = UnrolledLinkedListDeque2<Int>(4)
         val itemsCount = 6
 
         for (i in 1..itemsCount) {
@@ -463,7 +463,7 @@ class UnrolledLinkedListDequeTest {
 
     @Test
     fun testDescendingIterator_emptyList() {
-        val list = UnrolledLinkedListDeque<Int>(4)
+        val list = UnrolledLinkedListDeque2<Int>(4)
         val iterator = list.descendingIterator()
         assertFalse(iterator.hasNext())
         assertThrows(NoSuchElementException::class.java) { iterator.next() }
@@ -472,7 +472,7 @@ class UnrolledLinkedListDequeTest {
 
     @Test
     fun testDescendingIterator() {
-        val list = UnrolledLinkedListDeque<Int>(4)
+        val list = UnrolledLinkedListDeque2<Int>(4)
         val itemsCount = 6
         for (i in 1..itemsCount) {
             list.push(-i)
@@ -492,7 +492,7 @@ class UnrolledLinkedListDequeTest {
     fun testDescendingIterator_grown_from_tail() {
         val itemsCount = 6
         // test grow only from tail
-        val listFromTail = UnrolledLinkedListDeque<Int>(4)
+        val listFromTail = UnrolledLinkedListDeque2<Int>(4)
         for (i in 1..itemsCount) {
             listFromTail.add(i)
         }
@@ -509,7 +509,7 @@ class UnrolledLinkedListDequeTest {
     fun test_contains() {
         val itemsCount = 6
         // test grow only from tail
-        val list = UnrolledLinkedListDeque<Int>(4)
+        val list = UnrolledLinkedListDeque2<Int>(4)
         for (i in 1..itemsCount) {
             list.push(-i)
             list.add(i)
@@ -529,7 +529,7 @@ class UnrolledLinkedListDequeTest {
     fun test_containsAll() {
         val itemsCount = 6
         // test grow only from tail
-        val list = UnrolledLinkedListDeque<Int>(4)
+        val list = UnrolledLinkedListDeque2<Int>(4)
         for (i in 1..itemsCount) {
             list.push(-i)
             list.add(i)
