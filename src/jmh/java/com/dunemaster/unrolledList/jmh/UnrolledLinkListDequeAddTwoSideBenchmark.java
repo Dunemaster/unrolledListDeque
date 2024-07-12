@@ -23,7 +23,7 @@ public class UnrolledLinkListDequeAddTwoSideBenchmark {
             unrolledList.add(objectToAdd);
             unrolledList.push(objectToAdd);
         }
-        if (unrolledList.size() != OBJECTS_TO_ADD) {
+        if (unrolledList.size() != OBJECTS_TO_ADD * 2) {
             throw new IllegalStateException("List size is not correct");
         }
     }
@@ -77,7 +77,7 @@ public class UnrolledLinkListDequeAddTwoSideBenchmark {
             unrolledList.add(objectToAdd);
             unrolledList.push(objectToAdd);
         }
-        if (unrolledList.size() != OBJECTS_TO_ADD) {
+        if (unrolledList.size() != OBJECTS_TO_ADD*2) {
             throw new IllegalStateException("List size is not correct");
         }
     }
