@@ -1,10 +1,13 @@
 package com.dunemaster.unrolleddeque;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
-import java.util.*;
-
-public class UnrolledLinkedListDeque2<E> implements Deque<E> {
+public class UnrolledLinkedListDeque<E> implements Deque<E> {
 
     private static final int DEFAULT_BLOCK_SIZE = 128;
     private final int blockSize;
@@ -27,11 +30,11 @@ public class UnrolledLinkedListDeque2<E> implements Deque<E> {
 
     }
 
-    public UnrolledLinkedListDeque2() {
+    public UnrolledLinkedListDeque() {
         this(DEFAULT_BLOCK_SIZE);
     }
 
-    public UnrolledLinkedListDeque2(int blockSize) {
+    public UnrolledLinkedListDeque(int blockSize) {
         this.blockSize = blockSize;
         this.center = blockSize / 2 - 1;
         validateBlockSize();
@@ -200,7 +203,6 @@ public class UnrolledLinkedListDeque2<E> implements Deque<E> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                @SuppressWarnings("unchecked")
                 E element = (E) currentBlock.elements[indexInCurrentBlock];
                 indexInCurrentBlock++;
                 remaining--;
@@ -213,21 +215,18 @@ public class UnrolledLinkedListDeque2<E> implements Deque<E> {
         };
     }
 
-    @NotNull
     @Override
     public Object[] toArray() {
         //TODO
         return new Object[size];
     }
 
-    @NotNull
-    @Override
-    public <T> T[] toArray(@NotNull T[] ts) {
+      @Override
+    public <T> T[] toArray(T[] ts) {
         //TODO
         return null;
     }
 
-    @NotNull
     @Override
     public Iterator<E> descendingIterator() {
         return new Iterator<E>() {
