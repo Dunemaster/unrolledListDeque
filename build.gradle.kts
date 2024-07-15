@@ -35,8 +35,8 @@ publishing {
                 inceptionYear.set("2024")
                 licenses {
                     license {
-                        name.set("Apache-2.0")
-                        url.set("https://spdx.org/licenses/Apache-2.0.html")
+                        name.set("MIT")
+                        url.set("https://opensource.org/license/mit")
                     }
                 }
                 developers {
