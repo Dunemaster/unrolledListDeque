@@ -20,12 +20,13 @@ public class UnrolledLinkedListDeque<E> implements Deque<E> {
 
     private static final class Node<E> {
 
-        private final Object[] elements;
+        private final E[] elements;
         private Node<E> next;
         private Node<E> prev;
 
+        @SuppressWarnings("unchecked")
         Node(int blockSize) {
-            elements = new Object[blockSize];
+            elements = (E[]) new Object[blockSize];
         }
 
     }
@@ -188,7 +189,7 @@ public class UnrolledLinkedListDeque<E> implements Deque<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new Iterator<E>() {
+        return new Iterator<>() {
             private Node<E> currentBlock = head;
             private int indexInCurrentBlock = indexInHeadBlock;
             private int remaining = size;
@@ -216,9 +217,9 @@ public class UnrolledLinkedListDeque<E> implements Deque<E> {
     }
 
     @Override
-    public Object[] toArray() {
+    public E[] toArray() {
         //TODO
-        return new Object[size];
+        return (E[])new Object[size];
     }
 
       @Override
@@ -244,8 +245,8 @@ public class UnrolledLinkedListDeque<E> implements Deque<E> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                @SuppressWarnings("unchecked")
-                E element = (E) currentBlock.elements[indexInCurrentBlock];
+
+                E element = currentBlock.elements[indexInCurrentBlock];
                 indexInCurrentBlock--;
                 remaining--;
                 if (indexInCurrentBlock < 0 && remaining > 0) {

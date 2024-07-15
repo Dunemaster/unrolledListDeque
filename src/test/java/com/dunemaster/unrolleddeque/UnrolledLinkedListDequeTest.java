@@ -558,4 +558,18 @@ public class UnrolledLinkedListDequeTest {
         assertFalse(list.containsAll(asList( -1, -3, 6, 78)));
     }
 
+    @Test
+    public void test_toArray() {
+        int itemsCount = 6;
+        // test grow only from tail
+        UnrolledLinkedListDeque<Integer> list = new UnrolledLinkedListDeque<>(4);
+        for (int i = 0; i < itemsCount; i++) {
+            list.add(i);
+        }
+
+        // Act-assert
+        assertEquals(new Integer[] {0,1, 2, 3, 4, 5}, list.toArray());
+
+    }
+
 }
