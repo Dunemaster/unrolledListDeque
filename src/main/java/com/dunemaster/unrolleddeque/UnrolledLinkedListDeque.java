@@ -199,7 +199,7 @@ public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                E element = (E) currentBlock.elements[indexInCurrentBlock];
+                E element = currentBlock.elements[indexInCurrentBlock];
                 indexInCurrentBlock++;
                 remaining--;
                 if (indexInCurrentBlock == blockSize && remaining > 0) {
@@ -213,7 +213,7 @@ public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements
 
     @Override
     public Iterator<E> descendingIterator() {
-        return new Iterator<E>() {
+        return new Iterator<>() {
             private Node<E> currentBlock = tail;
             private int indexInCurrentBlock = indexInTailBlock;
             private int remaining = size;
@@ -257,14 +257,14 @@ public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements
         if (size == 0) {
             return null;
         }
-        return (E) head.elements[indexInHeadBlock];
+        return head.elements[indexInHeadBlock];
     }
 
     private E tryGetLast() {
         if (size == 0) {
             return null;
         }
-        return (E) tail.elements[indexInTailBlock];
+        return tail.elements[indexInTailBlock];
     }
 
     private boolean tryAddFirst(E element) {
@@ -303,7 +303,7 @@ public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements
         }
         // Adjust for the circular nature of the deque
         int effectiveIndex = indexInHeadBlock;
-        E element = (E) head.elements[effectiveIndex];
+        E element = head.elements[effectiveIndex];
         head.elements[effectiveIndex] = null; // Help GC
         indexInHeadBlock++;
         if (indexInHeadBlock == blockSize) {
@@ -325,7 +325,7 @@ public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements
             return null;
         }
 
-        E element = (E) tail.elements[indexInTailBlock];
+        E element = tail.elements[indexInTailBlock];
         // releasing memory!
         tail.elements[indexInTailBlock] = null;
         indexInTailBlock--;
@@ -375,11 +375,9 @@ public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements
         if (elements.size() == 1) {
             return contains(elements.iterator().next());
         }
-        Set<Object> testSet = elements instanceof Set ? (Set)elements : new HashSet<>(elements);
+        Set<Object> testSet = new HashSet<>(elements);
         for (Object dequeElement : this) {
-            if (testSet.contains(dequeElement)) {
-                testSet.remove(dequeElement);
-            }
+            testSet.remove(dequeElement);
         }
         return testSet.isEmpty();
     }
