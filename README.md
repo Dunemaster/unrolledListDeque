@@ -2,11 +2,29 @@
 
 ## Application
 
-TODO:
- - work stealing algorithm,
- - comparison to array list deque
- - comparison to linked list deque
- - performance data
+The primary application of the unrolled deque is in job scheduling. 
+The deque serves as a  work queue, supplied by multiple suppliers and consumed by multiple consumers. 
+
+The widely used Java alternatives for an unrolled deque are `LinkedList` and `ArrayDeque`.
+
+Compared to `LinkedList`, unrolled deque has:
+* better cache locality, meaning almost every operation (access, addition, removal) is faster.
+* much lower memory overhead.
+* much lower allocation rate, when the deque is used as a work queue and elements are frequently added and removed.
+
+It is easy to notice, that `ArrayDeque` has all the same advantages as unrolled deque, 
+and performance measurements show that `ArrayDeque` is faster than unrolled deque in most cases.
+
+So when should one prefer `UnrolledLinkedListDeque` over `ArrayDeque`?
+
+`UnrolledLinkedListDeque` has the following advantages over `ArrayDeque`:
+
+* `UnrolledLinkedListDeque` can shrink its size when the number of elements decreases 
+(compared to `ArrayDeque` which always keeps the maximum capacity to which it has grown).
+* `ArrayDeque` expands by doubling its internal storage, which means that in the worst case it can consume thrice as much memory it needs,
+which can require large continuous memory chunks and more frequent garbage collection.
+
+TODO: performance comparison
 
 ## Design and inspiration
 
