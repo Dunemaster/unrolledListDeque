@@ -554,7 +554,6 @@ public class UnrolledLinkedListDequeTest {
         // Act-assert
         assertTrue(list.containsAll(asList( -1, -3, 6, 3)));
         assertTrue(list.containsAll(singletonList(-1)));
-        // Follows Kotlin conventions
         assertTrue(list.containsAll(emptyList()));
         assertFalse(list.containsAll(asList( -1, -3, 6, 78)));
     }
