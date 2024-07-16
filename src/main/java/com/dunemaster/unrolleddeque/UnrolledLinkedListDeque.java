@@ -190,7 +190,7 @@ public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements
 
     @Override
     public Iterator<E> iterator() {
-        return new Iterator<>() {
+        return new Iterator<E>() {
             private Node<E> currentBlock = head;
             private int indexInCurrentBlock = indexInHeadBlock;
             private int remaining = size;
@@ -219,7 +219,7 @@ public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements
 
     @Override
     public Iterator<E> descendingIterator() {
-        return new Iterator<>() {
+        return new Iterator<E>() {
             private Node<E> currentBlock = tail;
             private int indexInCurrentBlock = indexInTailBlock;
             private int remaining = size;
