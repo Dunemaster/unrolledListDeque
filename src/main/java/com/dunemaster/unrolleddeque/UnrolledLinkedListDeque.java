@@ -1,6 +1,12 @@
 package com.dunemaster.unrolleddeque;
 
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements Deque<E> {
 
