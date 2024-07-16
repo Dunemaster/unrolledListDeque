@@ -1,5 +1,6 @@
 package com.dunemaster.unrolleddeque;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -559,7 +560,7 @@ public class UnrolledLinkedListDequeTest {
     }
 
     @Test
-    public void test_toArray() {
+    public void testToArray() {
         int itemsCount = 6;
         // test grow only from tail
         UnrolledLinkedListDeque<Integer> list = new UnrolledLinkedListDeque<>(4);
@@ -568,7 +569,7 @@ public class UnrolledLinkedListDequeTest {
         }
 
         // Act-assert
-        assertEquals(new Integer[] {0,1, 2, 3, 4, 5}, list.toArray());
+        Assertions.assertArrayEquals(new Object[]{0, 1, 2, 3, 4, 5}, list.toArray());
 
     }
 

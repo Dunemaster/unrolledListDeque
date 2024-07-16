@@ -1,13 +1,8 @@
 package com.dunemaster.unrolleddeque;
 
-import java.util.Collection;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
-public class UnrolledLinkedListDeque<E> implements Deque<E> {
+public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements Deque<E> {
 
     private static final int DEFAULT_BLOCK_SIZE = 128;
     private final int blockSize;
@@ -214,18 +209,6 @@ public class UnrolledLinkedListDeque<E> implements Deque<E> {
                 return element;
             }
         };
-    }
-
-    @Override
-    public E[] toArray() {
-        //TODO
-        return (E[])new Object[size];
-    }
-
-      @Override
-    public <T> T[] toArray(T[] ts) {
-        //TODO
-        return null;
     }
 
     @Override
