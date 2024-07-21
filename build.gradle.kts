@@ -1,6 +1,10 @@
+import org.jreleaser.model.Active
+
+
 plugins {
     id("me.champeau.jmh") version "0.7.2"
     id("maven-publish")
+    id("org.jreleaser") version "1.13.1"
 }
 
 group = "io.github.dunemaster"
@@ -13,6 +17,8 @@ repositories {
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+    withJavadocJar()
+    withSourcesJar()
 }
 
 dependencies {
@@ -23,8 +29,22 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+ext.set("allArchivesBaseName", "${project.group}-${project.name}")
+
 tasks.jar {
-    archiveFileName.set("${project.group}-${project.name}-${project.version}.jar")
+    archiveBaseName.set(ext.get("allArchivesBaseName") as String)
+}
+tasks.getByName<Jar>("sourcesJar") {
+    archiveClassifier.set("sources")
+    archiveBaseName.set(ext.get("allArchivesBaseName") as String)
+    from(sourceSets["main"].allSource)
+}
+
+tasks.getByName<Jar>("javadocJar") {
+    archiveClassifier.set("javadoc")
+    archiveBaseName.set(ext.get("allArchivesBaseName") as String)
+    from(tasks["javadoc"])
 }
 
 publishing {
@@ -32,9 +52,8 @@ publishing {
         create("mavenJava", MavenPublication::class) {
             from(components["java"])
 
-
             pom {
-                name.set("Unrolled Deque")
+                name.set("unrolledDeque")
                 description.set("Unrolled linked deque implementation")
                 url.set("https://github.com/Dunemaster/unrolledListDeque")
                 inceptionYear.set("2024")
@@ -58,15 +77,46 @@ publishing {
     }
     repositories {
         mavenLocal()
+        // This one is needed for the JReleaser as a sources repository
+        maven {
+            name = "staging-deploy"
+            url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
+        }
     }
 }
 
-tasks.register<Jar>("sourcesJar") {
-    archiveClassifier.set("sources")
-    from(sourceSets["main"].allSource)
+jreleaser {
+
+    signing {
+        active.set(Active.ALWAYS)
+        armored = true
+    }
+    release {
+        github {
+            enabled = true
+            repoOwner = "dunemaster"
+            name = "unrolledListDeque"
+            changelog {
+                enabled = false
+            }
+        }
+    }
+    deploy {
+        maven {
+            enabled = true
+            mavenCentral {
+                enabled = true
+                create("mavenCentral")  {
+                    enabled = true
+                    snapshotSupported = true
+                    active.set(Active.ALWAYS)
+                    stagingRepository("build/staging-deploy")
+                    url.set("https://central.sonatype.com/api/v1/publisher")
+                }
+
+            }
+        }
+    }
 }
 
-tasks.register<Jar>("javadocJar") {
-    archiveClassifier.set("javadoc")
-    from(tasks["javadoc"])
-}
+
