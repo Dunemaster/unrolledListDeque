@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "io.github.dunemaster"
-version = "0.9-SNAPSHOT"
+version = "0.10"
 
 repositories {
     mavenCentral()
