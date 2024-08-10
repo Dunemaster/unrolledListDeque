@@ -1,6 +1,6 @@
 # Java implementation of an unrolled deque data structure
 
-[[Maven Central]](https://mvnrepository.com/artifact/io.github.dunemaster/unrolleddeque/0.9)
+[Maven Central](https://mvnrepository.com/artifact/io.github.dunemaster/unrolleddeque/)
 
 ## Application
 
