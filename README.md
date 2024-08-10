@@ -1,5 +1,7 @@
 # Java implementation of an unrolled deque data structure
 
+[![Maven Central](https://mvnrepository.com/artifact/io.github.dunemaster/unrolleddeque/0.9)](https://mvnrepository.com/artifact/io.github.dunemaster/unrolleddeque/0.9)
+
 ## Application
 
 The primary application of the unrolled deque is in job scheduling. 
