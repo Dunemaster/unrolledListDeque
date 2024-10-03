@@ -23,7 +23,7 @@ So when should one prefer `UnrolledLinkedListDeque` over `ArrayDeque`?
 
 * `UnrolledLinkedListDeque` can shrink its size when the number of elements decreases 
 (compared to `ArrayDeque` which always keeps the maximum capacity to which it has grown).
-* `ArrayDeque` expands by doubling its internal storage, which means that in the worst case it can consume thrice as much memory it needs,
+* `ArrayDeque` expands by growing its internal storage by 50%, which means that in the worst case it can consume 2.5 times as much memory it needs,
 which can require large continuous memory chunks and more frequent garbage collection.
 
 TODO: performance comparison
