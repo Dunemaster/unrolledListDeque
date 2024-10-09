@@ -11,6 +11,7 @@ import java.util.Set;
 public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements Deque<E> {
 
     private static final int DEFAULT_BLOCK_SIZE = 128;
+    private static final Node<?> PLACEHOLDER = new Node<>(0);
     private final int blockSize;
     private final int center;
     private Node<E> head;
@@ -40,7 +41,8 @@ public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements
         this.blockSize = blockSize;
         this.center = blockSize / 2 - 1;
         validateBlockSize();
-        head = new Node<>(blockSize);
+        // do not allocate at construction time, probably the deque will stay empty
+        head = (Node<E>) PLACEHOLDER;
         setToClearState();
     }
 
@@ -275,7 +277,10 @@ public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements
 
     private boolean tryAddFirst(E element) {
         indexInHeadBlock--;
-        if (indexInHeadBlock < 0) {
+        if (head == PLACEHOLDER) {
+            head = new Node<>(blockSize);
+            tail = head;
+        } else if (indexInHeadBlock < 0) {
             Node<E> newNode = new Node<>(blockSize);
             if (size != 0) { // Only link nodes if the deque is not empty
                 newNode.next = head;
@@ -291,7 +296,10 @@ public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements
 
     private boolean tryAddLast(E element) {
         indexInTailBlock++;
-        if (indexInTailBlock == blockSize) {
+        if (head == PLACEHOLDER) {
+            head = new Node<>(blockSize);
+            tail = head;
+        } else if (indexInTailBlock == blockSize) {
             Node<E> newNode = new Node<>(blockSize);
             tail.next = newNode;
             newNode.prev = tail;
