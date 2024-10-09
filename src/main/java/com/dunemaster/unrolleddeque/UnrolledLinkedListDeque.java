@@ -318,7 +318,7 @@ public class UnrolledLinkedListDeque<E> extends AbstractCollection<E> implements
         // Adjust for the circular nature of the deque
         int effectiveIndex = indexInHeadBlock;
         E element = head.elements[effectiveIndex];
-        head.elements[effectiveIndex] = null; // Help GC
+        head.elements[effectiveIndex] = null; // releasing memory!
         indexInHeadBlock++;
         if (indexInHeadBlock == blockSize) {
             if (head != tail) {
