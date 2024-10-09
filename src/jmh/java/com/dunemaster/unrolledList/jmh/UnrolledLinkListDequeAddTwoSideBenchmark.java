@@ -4,7 +4,6 @@ import com.dunemaster.unrolleddeque.UnrolledLinkedListDeque;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 @State(Scope.Benchmark)

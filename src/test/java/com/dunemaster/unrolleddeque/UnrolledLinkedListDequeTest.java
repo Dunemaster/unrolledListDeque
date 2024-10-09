@@ -526,6 +526,7 @@ public class UnrolledLinkedListDequeTest {
         int itemsCount = 6;
         // test grow only from tail
         UnrolledLinkedListDeque<Integer> list = new UnrolledLinkedListDeque<Integer>(4);
+        assertFalse(list.contains(0));
         for (int i =  1; i <= itemsCount; i++) {
             list.push(-i);
             list.add(i);
